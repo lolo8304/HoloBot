@@ -65,7 +65,7 @@ namespace MakerShowBotTestClient
         // From the Bot Connector portal, enable the Direct Line channel on your bot
         // Generate and copy your Direct Line secret (aka API key)
         // TO DO: Please use your own key. This one connects to The Maker Show Bot
-        private string _APIKEY = "PN3lBLvTXwU.cwA.Kb8.qA6OkFZcgx2hLRSAlteqKnCZqYcQD_orUi_kwyw6i8k";
+        private string _APIKEY = "JFMOFhh5p_Q.cwA.Of8.Uqu333UoxpTm_vHND3atQbgNDFMt4lF51Rqdl-1zfpc";
         private string botToken;
         private string activeConversation;
         private string activeWatermark;
@@ -92,7 +92,9 @@ namespace MakerShowBotTestClient
                 HttpResponseMessage response = await client.PostAsync("api/tokens/conversation", stringContent);
                 if (response.IsSuccessStatusCode)
                 {
-                    botToken = response.Content.ReadAsStringAsync().Result;
+                    String botTokenTemp = response.Content.ReadAsStringAsync().Result;
+                    botToken = botTokenTemp.Substring(1, botTokenTemp.Length - 2);
+                    
                     //return botToken;
                 }
 
@@ -138,14 +140,24 @@ namespace MakerShowBotTestClient
                 };
 
                 string postBody = JsonConvert.SerializeObject(myMessage);
-                HttpResponseMessage response = await client.PostAsync("api/conversations/" + conversationId + "/messages",
-                    new StringContent(postBody, Encoding.UTF8, "application/json"));
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    var re = response.Content.ReadAsStringAsync().Result;
-                    return true;
+                    String urlString = "api/conversations/" + conversationId + "/messages";
+                    HttpContent httpContent = new StringContent(postBody, Encoding.UTF8, "application/json");
+                    HttpResponseMessage response = await client.PostAsync(urlString, httpContent);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var re = response.Content.ReadAsStringAsync().Result;
+                        return true;
+                    } else
+                    {
+                        return false;
+                    }
+                    return false;
+                } catch (Exception e)
+                {
+                    return false;
                 }
-                return false;
             }
         }
 

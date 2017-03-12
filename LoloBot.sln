@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoloBot", "LoloBot.csproj", "{8A31ECAB-0AEC-BDE3-8812-6726838F6EBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoloBot.Editor", "LoloBot.Editor.csproj", "{3BA8A4B6-403E-DC11-891B-42E4B9744AD4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A31ECAB-0AEC-BDE3-8812-6726838F6EBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A31ECAB-0AEC-BDE3-8812-6726838F6EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A31ECAB-0AEC-BDE3-8812-6726838F6EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A31ECAB-0AEC-BDE3-8812-6726838F6EBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BA8A4B6-403E-DC11-891B-42E4B9744AD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BA8A4B6-403E-DC11-891B-42E4B9744AD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BA8A4B6-403E-DC11-891B-42E4B9744AD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BA8A4B6-403E-DC11-891B-42E4B9744AD4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -229,7 +229,7 @@ public class MicrophoneManager : MonoBehaviour
         if (await tmsBot.SendMessage(msg))
         {
             ConversationMessages messages = await tmsBot.GetMessages();
-            for (int i = 1; i < messages.messages.Length; i++)
+            for (int i = 0; i < messages.messages.Length; i++)
             {
                 result = messages.messages[i].text;
             }
