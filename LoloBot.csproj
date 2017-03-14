@@ -70,6 +70,9 @@
     <Reference Include="Mono.Cecil">
       <HintPath>Library\UnityAssemblies\Mono.Cecil.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Rest.ClientRuntime">
+      <HintPath>Assets\Plugins\Microsoft.Rest.ClientRuntime.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\HoloToolkit\CrossPlatform\Scripts\MetroHandleRef.cs" />
@@ -243,6 +246,8 @@
     <Compile Include="Assets\Holograms\Support\PlayerAvatar\PlayerAvatarParameters.cs" />
     <Compile Include="Assets\Holograms\Support\SpatialMapping\EnergyOrbFinalImpactLifetime.cs" />
     <Compile Include="Assets\Scripts\BotService.cs" />
+    <Compile Include="Assets\Scripts\BotServiceV3.cs" />
+    <Compile Include="Assets\Scripts\BotServiceV3Lib.cs" />
     <Compile Include="Assets\Scripts\CaptionsManager.cs" />
     <Compile Include="Assets\Scripts\MicrophoneManager.cs" />
     <Compile Include="Assets\Scripts\TaptoPlace.cs" />
