@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 using HoloToolkit.Unity;
-using MakerShowBotV3LibTestClient;
+using MakerShowBotV3TestClient;
 
 /// <summary>
 /// MicrophoneManager lets us capture audio from the user and feed into speech recognition
@@ -31,7 +31,7 @@ public class MicrophoneManager : MonoBehaviour
     private static string deviceName = string.Empty;
     //private int samplingRate;
     private const int messageLength = 10;
-    private BotServiceV3Lib tmsBot = new BotServiceV3Lib();
+    private BotServiceV3 tmsBot = new BotServiceV3();
     private AudioSource[] audioSources;
     private AudioSource ttsAudioSrc;
 

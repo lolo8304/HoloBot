@@ -151,14 +151,6 @@
       <HintPath>$(SolutionDir)$(SolutionName)\Unprocessed\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.Bot.Connector.DirectLine">
-      <HintPath>$(SolutionDir)$(SolutionName)\Unprocessed\Microsoft.Bot.Connector.DirectLine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.Rest.ClientRuntime">
-      <HintPath>$(SolutionDir)$(SolutionName)\Unprocessed\Microsoft.Rest.ClientRuntime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>$(SolutionDir)$(SolutionName)\Unprocessed\UnityEngine.Networking.dll</HintPath>
       <Private>False</Private>
