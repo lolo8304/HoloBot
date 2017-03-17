@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 using HoloToolkit.Unity;
-using MakerShowBotV3TestClient;
+using LoloBotDirectLineV3;
 
 /// <summary>
 /// MicrophoneManager lets us capture audio from the user and feed into speech recognition
@@ -202,6 +202,15 @@ public class MicrophoneManager : MonoBehaviour
 
     // This event handler's code only works in UWP (i.e. HoloLens)
 #if WINDOWS_UWP
+
+
+    private string SpellCheckText(string text)
+    {
+        if (text.Equals("low low")) { return "Lolo"; }
+        return text;
+    }
+
+
     /// <summary>
     /// This event is fired after the user pauses, typically at the end of a sentence. The full recognized string is returned here.
     /// </summary>
@@ -217,10 +226,12 @@ public class MicrophoneManager : MonoBehaviour
         // Set DictationDisplay text to be textSoFar
         //DictationDisplay.text = textSoFar.ToString();
 
+        
+
         UnityEngine.WSA.Application.InvokeOnAppThread(() =>
         {
             // Display captions for the question
-            captionsManager.SetCaptionsText(text);
+            captionsManager.SetCaptionsText(SpellCheckText(text));
         }, false); 
 
         string msg = text;
@@ -228,12 +239,7 @@ public class MicrophoneManager : MonoBehaviour
 
         if (await tmsBot.SendMessage(msg))
         {
-            ConversationActitvities messages = await tmsBot.GetNewestActivities();
-            if (messages.activities.Length > 0)
-            {
-                Activity activity = messages.activities[messages.activities.Length - 1];
-                result = activity.text;
-            }
+            result = await tmsBot.GetNewestActivity();
         }
 
         //animator.Play("Happy");

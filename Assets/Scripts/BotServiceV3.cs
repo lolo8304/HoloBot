@@ -11,7 +11,7 @@ using System.Threading;
 using System.Diagnostics;
 #endif
 
-namespace MakerShowBotV3TestClient
+namespace LoloBotDirectLineV3
 {
 
 #if WINDOWS_UWP
@@ -49,22 +49,26 @@ namespace MakerShowBotV3TestClient
         public string id { get; set; }
     }
 
-    public class Activity
+    public class ActivityMessage
     {
-            public string id { get; set; }
-            public ConversationReference conversation { get; set; }
-            public UserId from { get; set; }
-            public string type { get; set; }
-            public string text { get; set; }
-            public DateTime timestamp { get; set; }
+        public string type { get; set; }
+        public UserId from { get; set; }
+        public string text { get; set; }
+    }
 
-            public string channelId { get; set; }
-            public string replyToId { get; set; }
-            public DateTime created { get; set; }
-            public Channeldata channelData { get; set; }
-            public string[] images { get; set; }
-            public Attachment[] attachments { get; set; }
-            public string eTag { get; set; }
+    public class Activity : ActivityMessage
+    {
+        public string id { get; set; }
+        public DateTime timestamp { get; set; }
+        public ConversationReference conversation { get; set; }
+
+        public string channelId { get; set; }
+        public string replyToId { get; set; }
+        public DateTime created { get; set; }
+        public Channeldata channelData { get; set; }
+        public string[] images { get; set; }
+        public Attachment[] attachments { get; set; }
+        public string eTag { get; set; }
     }
 
     public class Channeldata
@@ -127,7 +131,6 @@ namespace MakerShowBotV3TestClient
                 var keyreq = new KeyRequest() { Mainkey = "" };
                 var stringContent = new StringContent(keyreq.ToString());
                 HttpResponseMessage response = await client.PostAsync("v3/directline/conversations", stringContent);
-                //HttpResponseMessage response = await client.PostAsync("v3/directline/tokens/generate", stringContent);
                 if (response.IsSuccessStatusCode)
                 {
                     var re = response.Content.ReadAsStringAsync().Result;
@@ -158,11 +161,10 @@ namespace MakerShowBotV3TestClient
                 string messageId = Guid.NewGuid().ToString();
                 DateTime timeStamp = DateTime.Now;
                 var attachment = new Attachment();
-                var myMessage = new Activity()
+                var myMessage = new ActivityMessage()
                 {
                     type = "message",
                     from = new UserId() { id = "Joe" },
-                    conversation = new ConversationReference { id = conversationId },
                     text = message
                 };
 
@@ -184,22 +186,41 @@ namespace MakerShowBotV3TestClient
             return false;
             }
         }
+        public async Task<string> GetNewestActivity()
+        {
+            ConversationActitvities cm = await GetNewestActivities();
+            if (cm.activities.Length > 0)
+            {
+                return cm.activities[cm.activities.Length - 1].text;
+            }
+            else
+            {
+                return "";
+            }
+        }
 
         public async Task<ConversationActitvities> GetNewestActivities()
         {
-            Debug.WriteLine("searching for "+newActivityId);
+            await Task.Delay(TimeSpan.FromMilliseconds(200)).ConfigureAwait(true);
             int inc = 0;
             ConversationActitvities cm = await GetMessages();
-            while (++inc < 10) {
-                Debug.WriteLine("activities size = " + cm.activities.Length);
-                for (int i = 0; i < cm.activities.Length-1; i++)
+            while (++inc < 5)
+            {
+                Debug.WriteLine(cm.activities.Length + " conversations received");
+                for (int i = 0; i < cm.activities.Length; i++)
                 {
                     var activity = cm.activities[i];
-                    lastResponse = activity.id + " / " + newActivityId;
-                    if (activity.id.Equals(newActivityId)) {
+                    Debug.WriteLine("activity received = " + activity.text);
+                    lastResponse = activity.id + " / " + activity.replyToId + " / " + newActivityId;
+
+                    // wait for reply message from my message
+                    if (activity.replyToId != null && activity.replyToId.Equals(newActivityId))
+                    {
+                        Debug.WriteLine("activity is response to " + newActivityId);
                         return cm;
                     }
                 }
+                await Task.Delay(TimeSpan.FromMilliseconds(200)).ConfigureAwait(true);
                 cm = await GetMessages();
             }
             return cm;
