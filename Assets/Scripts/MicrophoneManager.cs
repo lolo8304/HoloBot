@@ -221,6 +221,7 @@ public class MicrophoneManager : MonoBehaviour
         StopRecording();
 
         // Append textSoFar with latest text
+        text = SpellCheckText(text);
         textSoFar.Append(text);
 
         // Set DictationDisplay text to be textSoFar
@@ -231,7 +232,7 @@ public class MicrophoneManager : MonoBehaviour
         UnityEngine.WSA.Application.InvokeOnAppThread(() =>
         {
             // Display captions for the question
-            captionsManager.SetCaptionsText(SpellCheckText(text));
+            captionsManager.SetCaptionsText(text);
         }, false); 
 
         string msg = text;
