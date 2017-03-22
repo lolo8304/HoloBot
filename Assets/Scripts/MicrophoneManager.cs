@@ -5,13 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 using HoloToolkit.Unity;
-using LoloBotDirectLineV3;
+using LoloBotDirectLineV3WebSocket;
+using System;
 
 /// <summary>
 /// MicrophoneManager lets us capture audio from the user and feed into speech recognition
 /// Make sure to enable the Microphone capability in the Windows 10 UWP Player Settings
 /// </summary>
-public class MicrophoneManager : MonoBehaviour
+public class MicrophoneManager : MonoBehaviour, BotCallback
 {
     //[Tooltip("A text area for the recognizer to display the recognized strings.")]
     //public Text DictationDisplay;
@@ -31,7 +32,7 @@ public class MicrophoneManager : MonoBehaviour
     private static string deviceName = string.Empty;
     //private int samplingRate;
     private const int messageLength = 10;
-    private BotServiceV3 tmsBot = new BotServiceV3();
+    private BotServiceV3WebSocket tmsBot = new BotServiceV3WebSocket();
     private AudioSource[] audioSources;
     private AudioSource ttsAudioSrc;
 
@@ -85,7 +86,7 @@ public class MicrophoneManager : MonoBehaviour
 #if WINDOWS_UWP
         var startTask = tmsBot.StartConversation();
         startTask.Wait();
-        // startTask.Result;
+        tmsBot.StartWebSocket(this);
 #endif
 
     }
@@ -238,21 +239,10 @@ public class MicrophoneManager : MonoBehaviour
         string msg = text;
         string result = "I'm sorry, I'm not sure how to answer that";
 
-        if (await tmsBot.SendMessage(msg))
-        {
-            result = await tmsBot.GetNewestActivity();
-        }
+        await tmsBot.SendMessage(msg);
 
         //animator.Play("Happy");
-        MyTTS.SpeakText(result);
-
-        UnityEngine.WSA.Application.InvokeOnAppThread(() =>
-        {
-            // Display captions for the question
-            captionsManager.SetCaptionsText(result);
-        }, false);     
     }
-
 #else
 
     /// <summary>
@@ -275,7 +265,15 @@ public class MicrophoneManager : MonoBehaviour
         //DictationDisplay.text = textSoFar.ToString();
     }
 #endif
-    
+    public void OnMessage(string result)
+    {
+        MyTTS.SpeakText(result);
+        UnityEngine.WSA.Application.InvokeOnAppThread(() =>
+        {
+            // Display captions for the question
+            captionsManager.SetCaptionsText(result);
+        }, false);
+    }
     /// <summary>
     /// This event is fired when the recognizer stops, whether from Stop() being called, a timeout occurring, or some other error.
     /// Typically, this will simply return "Complete". In this case, we check to see if the recognizer timed out.
@@ -305,6 +303,8 @@ public class MicrophoneManager : MonoBehaviour
         // Set DictationDisplay text to be the error string
         //DictationDisplay.text = error + "\nHRESULT: " + hresult;
     }
+
+
 
     //private IEnumerator RestartSpeechSystem()
     //{
